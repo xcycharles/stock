@@ -6,3 +6,5 @@ statsmodels
 matplotlib
 seaborn
 jupyter
+yfinance
+sklearn
