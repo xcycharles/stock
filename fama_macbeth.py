@@ -291,7 +291,7 @@ for i in range(1,8):
     models_best.loc[i] = getBest(i)
 toc = time.time()
 print("Total elapsed time:", (toc-tic), "seconds.")
-print(models_best.loc[3, "model"].summary())
+print(models_best.loc[3, "model"].summary()) # using 3 factors is the most efficient way here
 plt.figure(figsize=(20,10))
 plt.rcParams.update({'font.size': 18, 'lines.markersize': 10})
 
