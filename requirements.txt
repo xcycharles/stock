@@ -8,3 +8,5 @@ seaborn
 jupyter
 yfinance
 sklearn
+pandas_datareader
+yahoo_fin
