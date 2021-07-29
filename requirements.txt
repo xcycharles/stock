@@ -10,3 +10,5 @@ yfinance
 sklearn
 pandas_datareader
 yahoo_fin
+sqlalchemy
+pymysql
