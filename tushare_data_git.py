@@ -5,7 +5,7 @@ from icecream import ic
 import datetime as dt
 
 # config
-pro = ts.pro_api('ad8481f791b1d3a70d596d8d9a1cedcc8bcb1ca2af7ef4a125c7752a')
+pro = ts.pro_api('your api key')
 
 
 # def get_stock_data(start, end):
