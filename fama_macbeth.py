@@ -27,12 +27,12 @@ index = index[:-1]
 # the main loop
 
 #for f in ['feps','fep','disp','pead','nsi','accrual','noa','ag','ia']:
-for f in ['feps','noa','ag']:
+for f in ['feps']:
 
     # Step 1: prepare data
 
     df = pd.read_stata('dataset19842018.dta')
-    df_return = pd.read_stata('famafrench19842018.dta')
+    df_return = pd.read_stata('famafrench19842018.dta') # it is not ideal to load new data set for every loop, but we need to dropna differently each loop
     df[f].dropna(axis=0,how='any', inplace=True) # check by df.isnull().sum()
     df['mv_eq'].dropna(axis=0,how='any', inplace=True) # market value
     df['siccd'].dropna(axis=0,how='any', inplace=True) # industry
@@ -202,7 +202,6 @@ for f in ['feps','noa','ag']:
     print(final_result)
     print(final_result1)
     print(final_result2)
-    print("time elapsed: {:.2f}m".format((time.time() - start_time)/60))
 
 
 # Load machine learning libraries
@@ -245,6 +244,7 @@ for name, model in models:
 	print('%s: %f (%f)' % (name, cv_results.mean(), cv_results.std()))
 
 
+# ridge regression
 from sklearn.linear_model import Ridge
 ridge = Ridge(alpha=1.0)
 ridge.fit(X,Y)
@@ -258,9 +258,13 @@ def pretty_print_coefs(coefs, names = None, sort = False):
                                    for coef, name in lst)
 print ("Ridge model:", pretty_print_coefs(ridge.coef_))
 
+
 # best subset selection
 X = df.dropna().loc[:,['feps','disp','fep','pead','nsi','accrual','noa','ag','ia']]
 Y = df.dropna().loc[:,'ret_f0f1']
+X_train, X_validation, Y_train, Y_validation = train_test_split(X, Y, test_size=0.20, random_state=1)
+X = X_train
+Y = Y_train
 
 def processSubset(feature_set):
     # Fit model on feature_set and calculate RSS
@@ -268,7 +272,6 @@ def processSubset(feature_set):
     regr = model.fit()
     RSS = ((regr.predict(X[list(feature_set)]) - Y) ** 2).sum()
     return {"model":regr, "RSS":RSS}
-
 
 def getBest(k):
     tic = time.time()
@@ -331,3 +334,7 @@ plt.plot(bic)
 plt.plot(bic.argmin(), bic.min(), "or")
 plt.xlabel('# Predictors')
 plt.ylabel('BIC')
+
+plt.show()
+
+print("time elapsed: {:.2f}m".format((time.time() - start_time)/60))
